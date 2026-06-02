@@ -1758,6 +1758,13 @@ const TRF = {
 // T100 : fourchettes par groupe d'âge et montant — homme non-fumeur parfaite santé
 // Clés âge : 35=18-35 · 45=36-45 · 55=46-55 · 65=56-65 · 75=66-85
 // Clés montant : p10=10k · p25=25k · p50=50k · p100=100k · p250=250k
+const T100F = {
+  35: { p10:null,             p25:{min:14,max:25},  p50:{min:24,max:40},  p100:{min:35,max:65},   p250:{min:70,max:137}  },
+  45: { p10:null,             p25:{min:21,max:32},  p50:{min:38,max:55},  p100:{min:67,max:94},   p250:{min:144,max:217} },
+  55: { p10:null,             p25:{min:30,max:47},  p50:{min:56,max:80},  p100:{min:98,max:140},  p250:{min:227,max:328} },
+  65: { p10:{min:23,max:33},  p25:{min:44,max:76},  p50:{min:81,max:137}, p100:{min:149,max:254}, p250:{min:348,max:554} },
+  75: { p10:{min:32,max:170}, p25:{min:76,max:357}, p50:{min:145,max:710},p100:{min:270,max:1293},p250:{min:561,max:2664}}
+};
 const T100H = {
   35: { p10:null,             p25:{min:15,max:28},  p50:{min:27,max:45},  p100:{min:40,max:75},   p250:{min:90,max:168}  },
   45: { p10:null,             p25:{min:24,max:42},  p50:{min:43,max:66},  p100:{min:75,max:110},  p250:{min:164,max:258} },
@@ -1799,10 +1806,10 @@ function calcPremiumRange() {
   const tierMap = {10000:'p10', 25000:'p25', 50000:'p50', 100000:'p100', 250000:'p250'};
   const tier = tierMap[montant];
   if (!tier) return null;
-  const row = T100H[ageKey];
+  const table = sexe === 'femme' ? T100F : T100H;
+  const row = table[ageKey];
   if (!row || !row[tier]) return null;
   let r = {min: row[tier].min, max: row[tier].max};
-  if (sexe === 'femme')       { r.min = Math.round(r.min*0.80); r.max = Math.round(r.max*0.80); }
   if (fumeur === 'true')      { r.min = Math.round(r.min*1.85); r.max = Math.round(r.max*1.85); }
   if (sante === 'conditions') { r.min = Math.round(r.min*1.30); r.max = Math.round(r.max*1.30); }
   return r;
