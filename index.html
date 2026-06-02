@@ -1917,9 +1917,9 @@ function updatePreview() {
       prev.style.display = 'block';
     } else { prev.style.display = 'none'; }
   } else {
-    const p = calcPremium();
-    if (p && p > 0) {
-      amountEl.textContent = p + ' $';
+    const r = calcPremiumRange();
+    if (r) {
+      amountEl.textContent = r.min + '$ – ' + r.max + '$';
       prev.style.display = 'block';
     } else { prev.style.display = 'none'; }
   }
