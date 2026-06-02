@@ -1124,6 +1124,14 @@
                 <div class="price-per">/ mois</div>
               </td>
             </tr>
+            <tr>
+              <td>66 – 85 ans</td>
+              <td>50 000 $</td>
+              <td>
+                <div class="price-from perm">183 $ – 900 $</div>
+                <div class="price-per">/ mois</div>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -1755,7 +1763,7 @@ const T100H = {
   45: { p10:null,             p25:{min:24,max:42},  p50:{min:43,max:66},  p100:{min:75,max:110},  p250:{min:164,max:258} },
   55: { p10:null,             p25:{min:35,max:56},  p50:{min:66,max:95},  p100:{min:114,max:165}, p250:{min:268,max:391} },
   65: { p10:{min:26,max:39},  p25:{min:54,max:90},  p50:{min:100,max:175},p100:{min:175,max:285}, p250:{min:416,max:687} },
-  75: { p10:{min:40,max:200}, p25:{min:90,max:450}, p50:null,             p100:{min:287,max:1676},p250:{min:607,max:3537}}
+  75: { p10:{min:40,max:200}, p25:{min:90,max:450}, p50:{min:183,max:900},p100:{min:287,max:1676},p250:{min:607,max:3537}}
 };
 
 function getAgeKey(age) {
@@ -1854,7 +1862,7 @@ function setupStep3() {
   const permAmt = [];
   if (ws.age >= 56) permAmt.push({v:10000, l:'10 000 $'});
   permAmt.push({v:25000, l:'25 000 $'});
-  if (ws.age <= 65) permAmt.push({v:50000, l:'50 000 $'});
+  permAmt.push({v:50000, l:'50 000 $'});
   permAmt.push({v:100000, l:'100 000 $'});
   permAmt.push({v:250000, l:'250 000 $ et plus'});
   (type === 'permanent' ? permAmt : tempAmt).forEach(a => {
