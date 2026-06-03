@@ -1412,7 +1412,7 @@
       <div class="wiz-progress-track">
         <div class="wiz-progress-fill" id="wiz-progress-fill" style="width:20%"></div>
       </div>
-      <div class="wiz-step-label" id="wiz-step-label">Étape 1 sur 5</div>
+      <div class="wiz-step-label" id="wiz-step-label">Étape 1 sur 6</div>
     </div>
 
     <!-- Steps -->
@@ -1583,8 +1583,26 @@
         </div>
       </div>
 
-      <!-- STEP 5 : CONFIRMATION -->
+      <!-- STEP 5 : RÉSERVATION RDV -->
       <div class="wiz-step" id="wiz-step-5">
+        <div class="wiz-step-title">📅 Réservez votre consultation gratuite</div>
+        <div class="wiz-step-sub">Choisissez un créneau qui vous convient avec un conseiller certifié AMF. La réservation est <strong>obligatoire</strong> pour finaliser votre demande.</div>
+
+        <div id="booking-lock-msg" style="background:#fef3c7;border:1.5px solid #fcd34d;border-radius:10px;padding:12px 15px;font-size:.84rem;color:#92400e;display:flex;gap:9px;align-items:flex-start;margin-bottom:14px;">
+          <span style="flex-shrink:0;font-size:1.1rem;">⚠️</span>
+          <span>Sélectionnez un créneau dans le calendrier ci-dessous pour activer le bouton <strong>Envoyer ma demande</strong>.</span>
+        </div>
+
+        <div id="booking-confirmed-msg" style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:12px 15px;font-size:.84rem;color:#166534;display:none;gap:9px;align-items:center;margin-bottom:14px;">
+          <span style="font-size:1.2rem;">✅</span>
+          <span><strong>Rendez-vous confirmé !</strong> Cliquez sur <em>Envoyer ma demande</em> pour finaliser.</span>
+        </div>
+
+        <iframe id="booking-iframe" src="" style="width:100%;height:680px;border:none;border-radius:12px;display:block;" title="Réservation de consultation"></iframe>
+      </div>
+
+      <!-- STEP 6 : CONFIRMATION -->
+      <div class="wiz-step" id="wiz-step-6">
         <div style="text-align:center; padding: 10px 0 20px;">
 
           <div style="width:80px;height:80px;background:#dcfce7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:2.4rem;">✅</div>
@@ -1675,10 +1693,10 @@ function selectOpt(el) {
 
 // ── Wizard state ──────────────────────────────────────────────
 let wizStep = 1;
-const TOTAL = 5;
+const TOTAL = 6;
 const ws = { type:null, prenom:'', nom:'', age:40, sexe:null,
              fumeur:null, sante:null, sante_detail:'', montant:null, montant_label:'', duree:null,
-             email:'', telephone:'', ville:'' };
+             email:'', telephone:'', ville:'', booked:false };
 
 // ── Pricing tables ────────────────────────────────────────────
 // Temporaire : fourchettes réelles mai 2026
@@ -1848,8 +1866,19 @@ function showStep(n) {
   const btnNext = document.getElementById('wiz-btn-next');
   if (n === TOTAL) { footer.style.display = 'none'; return; }
   footer.style.display = 'flex';
-  btnNext.textContent = n === TOTAL-1 ? 'Envoyer ma demande →' : 'Continuer →';
+  if (n === TOTAL-1) {
+    btnNext.textContent = 'Envoyer ma demande →';
+    btnNext.disabled = !ws.booked;
+    btnNext.style.opacity = ws.booked ? '1' : '0.5';
+    btnNext.style.cursor = ws.booked ? 'pointer' : 'not-allowed';
+  } else {
+    btnNext.textContent = 'Continuer →';
+    btnNext.disabled = false;
+    btnNext.style.opacity = '1';
+    btnNext.style.cursor = 'pointer';
+  }
   if (n === 3) setupStep3();
+  if (n === 5) setupStep5();
 }
 
 // ── Step 3 dynamic content ────────────────────────────────────
@@ -2035,6 +2064,13 @@ function validateStep(n) {
       if (first) first.scrollIntoView({behavior:'smooth', block:'center'});
     }
   }
+  if (n === 5) {
+    if (!ws.booked) {
+      const lockMsg = document.getElementById('booking-lock-msg');
+      lockMsg.style.animation = 'none'; void lockMsg.offsetHeight; lockMsg.style.animation = 'shake .4s ease';
+      ok = false;
+    }
+  }
   return ok;
 }
 
@@ -2063,6 +2099,49 @@ function buildResult() {
     } else { pc.style.display = 'none'; }
   } else { pc.style.display = 'none'; }
 }
+
+// ── Booking RDV ───────────────────────────────────────────────
+function setupStep5() {
+  const iframe = document.getElementById('booking-iframe');
+  if (iframe.dataset.loaded) return;
+  iframe.dataset.loaded = '1';
+  const url = new URL('https://api.leadconnectorhq.com/widget/booking/F4qC70cj2CaMNEFzBSGw');
+  if (ws.prenom)    url.searchParams.set('firstName', ws.prenom);
+  if (ws.nom)       url.searchParams.set('lastName',  ws.nom);
+  if (ws.email)     url.searchParams.set('email',     ws.email);
+  if (ws.telephone) url.searchParams.set('phone',     ws.telephone.replace(/\D/g,''));
+  iframe.src = url.toString();
+}
+
+function markBooked() {
+  ws.booked = true;
+  document.getElementById('booking-lock-msg').style.display = 'none';
+  const confirmed = document.getElementById('booking-confirmed-msg');
+  confirmed.style.display = 'flex';
+  if (wizStep === 5) {
+    const btn = document.getElementById('wiz-btn-next');
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+  }
+}
+
+window.addEventListener('message', function(e) {
+  if (ws.booked) return;
+  const d = e.data;
+  if (!d) return;
+  try {
+    const obj = typeof d === 'object' ? d : JSON.parse(d);
+    if (obj.event === 'booked' || obj.event === 'appointment_booked' ||
+        obj.type === 'booked' || obj.status === 'booked' ||
+        obj.bookedSlot !== undefined || obj.appointmentId !== undefined ||
+        obj.calendarId !== undefined) {
+      markBooked();
+    }
+  } catch (ex) {
+    if (typeof d === 'string' && d.toLowerCase().includes('booked')) markBooked();
+  }
+});
 
 // ── Format téléphone ──────────────────────────────────────────
 function formatTel(input) {
