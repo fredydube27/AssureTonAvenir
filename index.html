@@ -1446,19 +1446,6 @@
         <div class="wiz-step-title">Votre profil</div>
         <div class="wiz-step-sub">Ces informations servent à calculer votre estimation de prime.</div>
 
-        <div class="wiz-row">
-          <div class="wiz-field">
-            <label>Prénom</label>
-            <input type="text" id="f-prenom" placeholder="Ex : Marie" oninput="ws.prenom=this.value" autocomplete="given-name"/>
-            <div class="field-error" id="err-prenom">Prénom requis</div>
-          </div>
-          <div class="wiz-field">
-            <label>Nom</label>
-            <input type="text" id="f-nom" placeholder="Ex : Tremblay" oninput="ws.nom=this.value" autocomplete="family-name"/>
-            <div class="field-error" id="err-nom">Nom requis</div>
-          </div>
-        </div>
-
         <div class="wiz-field">
           <label>Votre âge</label>
           <div class="age-display" id="age-display">40 <span>ans</span></div>
@@ -1536,6 +1523,19 @@
       <div class="wiz-step" id="wiz-step-4">
         <div class="wiz-step-title">Vos coordonnées</div>
         <div class="wiz-step-sub">Votre conseiller vous contactera sous 24h ouvrables. Aucune pression, aucun engagement.</div>
+
+        <div class="wiz-row">
+          <div class="wiz-field">
+            <label>Prénom</label>
+            <input type="text" id="f-prenom" placeholder="Ex : Marie" oninput="ws.prenom=this.value" autocomplete="given-name"/>
+            <div class="field-error" id="err-prenom">Prénom requis</div>
+          </div>
+          <div class="wiz-field">
+            <label>Nom</label>
+            <input type="text" id="f-nom" placeholder="Ex : Tremblay" oninput="ws.nom=this.value" autocomplete="family-name"/>
+            <div class="field-error" id="err-nom">Nom requis</div>
+          </div>
+        </div>
 
         <div class="wiz-field">
           <label>Adresse courriel</label>
@@ -1836,6 +1836,10 @@ function calcPremiumRange() {
 // ── Open / close ──────────────────────────────────────────────
 function openWizard(preType) {
   if (preType) ws.type = preType;
+  ws.booked = false;
+  document.getElementById('booking-iframe').src = '';
+  document.getElementById('booking-lock-msg').style.display = 'flex';
+  document.getElementById('booking-confirmed-msg').style.display = 'none';
   document.getElementById('wiz-overlay').style.display = 'flex';
   document.body.style.overflow = 'hidden';
   showStep(1);
@@ -2035,8 +2039,6 @@ function validateStep(n) {
     }
   }
   if (n === 2) {
-    if (!ws.prenom.trim())  { setErr('err-prenom',true);  ok=false; } else setErr('err-prenom',false);
-    if (!ws.nom.trim())     { setErr('err-nom',true);     ok=false; } else setErr('err-nom',false);
     if (!ws.sexe)           { setErr('err-sexe',true);    ok=false; } else setErr('err-sexe',false);
     if (ws.fumeur===null)   { setErr('err-fumeur',true);  ok=false; } else setErr('err-fumeur',false);
     if (!ws.sante)          { setErr('err-sante',true);   ok=false; } else setErr('err-sante',false);
@@ -2046,6 +2048,8 @@ function validateStep(n) {
     if (ws.type==='temporaire' && !ws.duree)       { setErr('err-duree',true);   ok=false; } else setErr('err-duree',false);
   }
   if (n === 4) {
+    if (!ws.prenom.trim()) { setErr('err-prenom',true);  ok=false; } else setErr('err-prenom',false);
+    if (!ws.nom.trim())    { setErr('err-nom',true);     ok=false; } else setErr('err-nom',false);
     const eRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const emailEl = document.getElementById('f-email');
     const telEl   = document.getElementById('f-tel');
@@ -2103,13 +2107,12 @@ function buildResult() {
 // ── Booking RDV ───────────────────────────────────────────────
 function setupStep5() {
   const iframe = document.getElementById('booking-iframe');
-  if (iframe.dataset.loaded) return;
-  iframe.dataset.loaded = '1';
   const url = new URL('https://api.leadconnectorhq.com/widget/booking/F4qC70cj2CaMNEFzBSGw');
   if (ws.prenom)    url.searchParams.set('firstName', ws.prenom);
   if (ws.nom)       url.searchParams.set('lastName',  ws.nom);
   if (ws.email)     url.searchParams.set('email',     ws.email);
   if (ws.telephone) url.searchParams.set('phone',     ws.telephone.replace(/\D/g,''));
+  if (ws.email)     url.searchParams.set('name',      (ws.prenom+' '+ws.nom).trim());
   iframe.src = url.toString();
 }
 
