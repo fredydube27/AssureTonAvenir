@@ -2108,11 +2108,11 @@ function buildResult() {
 function setupStep5() {
   const iframe = document.getElementById('booking-iframe');
   const url = new URL('https://api.leadconnectorhq.com/widget/booking/F4qC70cj2CaMNEFzBSGw');
-  if (ws.prenom)    url.searchParams.set('firstName', ws.prenom);
-  if (ws.nom)       url.searchParams.set('lastName',  ws.nom);
-  if (ws.email)     url.searchParams.set('email',     ws.email);
-  if (ws.telephone) url.searchParams.set('phone',     ws.telephone.replace(/\D/g,''));
-  if (ws.email)     url.searchParams.set('name',      (ws.prenom+' '+ws.nom).trim());
+  if (ws.prenom)    { url.searchParams.set('firstName',  ws.prenom); url.searchParams.set('first_name', ws.prenom); }
+  if (ws.nom)       { url.searchParams.set('lastName',   ws.nom);    url.searchParams.set('last_name',  ws.nom); }
+  if (ws.email)     url.searchParams.set('email',      ws.email);
+  if (ws.telephone) url.searchParams.set('phone',      ws.telephone.replace(/\D/g,''));
+  if (ws.prenom || ws.nom) url.searchParams.set('name', (ws.prenom+' '+ws.nom).trim());
   iframe.src = url.toString();
 }
 
