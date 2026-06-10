@@ -1412,7 +1412,7 @@
       <div class="wiz-progress-track">
         <div class="wiz-progress-fill" id="wiz-progress-fill" style="width:20%"></div>
       </div>
-      <div class="wiz-step-label" id="wiz-step-label">Étape 1 sur 6</div>
+      <div class="wiz-step-label" id="wiz-step-label">Étape 1 sur 5</div>
     </div>
 
     <!-- Steps -->
@@ -1441,10 +1441,10 @@
         </div>
       </div>
 
-      <!-- STEP 2 : PROFIL -->
+      <!-- STEP 2 : PROFIL + COORDONNÉES -->
       <div class="wiz-step" id="wiz-step-2">
         <div class="wiz-step-title">Votre profil</div>
-        <div class="wiz-step-sub">Ces informations servent à calculer votre estimation de prime.</div>
+        <div class="wiz-step-sub">Ces informations servent à calculer votre estimation de prime et à vous contacter.</div>
 
         <div class="wiz-field">
           <label>Votre âge</label>
@@ -1488,41 +1488,8 @@
           </div>
           <div class="field-error" id="err-sante">Veuillez sélectionner votre état de santé</div>
         </div>
-      </div>
 
-      <!-- STEP 3 : COUVERTURE -->
-      <div class="wiz-step" id="wiz-step-3">
-        <div class="wiz-step-title">Votre couverture désirée</div>
-        <div class="wiz-step-sub" id="step3-sub">Choisissez le montant et la durée de protection.</div>
-
-        <div class="wiz-field">
-          <label>Montant de couverture</label>
-          <div class="wiz-pills" id="montant-pills"></div>
-          <div class="field-error" id="err-montant">Veuillez choisir un montant</div>
-        </div>
-
-        <div id="duree-section" class="wiz-field" style="display:none">
-          <label>Durée du terme</label>
-          <div class="wiz-pills" id="duree-pills"></div>
-          <div class="field-error" id="err-duree">Veuillez choisir une durée</div>
-        </div>
-
-        <div id="step3-preview">
-          <div style="font-size:.8rem;color:var(--gray);font-weight:600;margin-bottom:3px;">Fourchette de prix mensuelle</div>
-          <div id="preview-amount" style="font-size:2rem;font-weight:900;color:var(--blue);line-height:1;">—</div>
-          <div style="font-size:.77rem;color:var(--gray);margin-top:4px;">/ mois</div>
-          <div style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:8px;padding:10px 12px;margin-top:10px;text-align:left;">
-            <div style="font-size:.78rem;font-weight:700;color:#dc2626;margin-bottom:4px;">⚠️ Important — À lire avant de continuer</div>
-            <div style="font-size:.75rem;color:#b91c1c;line-height:1.55;">Ces prix sont calculés pour une personne <strong>non-fumeuse en bonne santé</strong>. Les fourchettes affichées représentent <strong>90 % des vrais prix à jour de mai 2026</strong> selon les assureurs partenaires. Votre prime réelle peut différer selon votre profil médical complet, votre historique et l'assureur retenu. Un conseiller certifié AMF vous confirmera le tarif exact.</div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- STEP 4 : COORDONNÉES -->
-      <div class="wiz-step" id="wiz-step-4">
-        <div class="wiz-step-title">Vos coordonnées</div>
-        <div class="wiz-step-sub">Votre conseiller vous contactera sous 24h ouvrables. Aucune pression, aucun engagement.</div>
+        <div style="border-top:1px solid var(--border);margin:18px 0 16px;"></div>
 
         <div class="wiz-row">
           <div class="wiz-field">
@@ -1531,7 +1498,7 @@
             <div class="field-error" id="err-prenom">Prénom requis</div>
           </div>
           <div class="wiz-field">
-            <label>Nom</label>
+            <label>Nom de famille</label>
             <input type="text" id="f-nom" placeholder="Ex : Tremblay" oninput="ws.nom=this.value" autocomplete="family-name"/>
             <div class="field-error" id="err-nom">Nom requis</div>
           </div>
@@ -1575,16 +1542,41 @@
 
         <div class="wiz-privacy">
           <span>🔒</span>
-          <span>Vos informations sont <strong>100 % confidentielles</strong> et ne seront jamais vendues à des tiers. Un seul conseiller certifié AMF vous contactera.</span>
-        </div>
-        <div class="wiz-privacy" style="margin-top:8px; font-size:.78rem; color:var(--gray);">
-          <span>⚖️</span>
-          <span>AssureTonAvenir est un service de mise en relation. Aucun conseil en assurance n'est fourni directement par ce site.</span>
+          <span>Vos informations sont <strong>100 % confidentielles</strong> et ne seront jamais vendues à des tiers.</span>
         </div>
       </div>
 
-      <!-- STEP 5 : RÉSERVATION RDV -->
-      <div class="wiz-step" id="wiz-step-5">
+      <!-- STEP 3 : COUVERTURE -->
+      <div class="wiz-step" id="wiz-step-3">
+        <div class="wiz-step-title">Votre couverture désirée</div>
+        <div class="wiz-step-sub" id="step3-sub">Choisissez le montant et la durée de protection.</div>
+
+        <div class="wiz-field">
+          <label>Montant de couverture</label>
+          <div class="wiz-pills" id="montant-pills"></div>
+          <div class="field-error" id="err-montant">Veuillez choisir un montant</div>
+        </div>
+
+        <div id="duree-section" class="wiz-field" style="display:none">
+          <label>Durée du terme</label>
+          <div class="wiz-pills" id="duree-pills"></div>
+          <div class="field-error" id="err-duree">Veuillez choisir une durée</div>
+        </div>
+
+        <div id="step3-preview">
+          <div style="font-size:.8rem;color:var(--gray);font-weight:600;margin-bottom:3px;">Fourchette de prix mensuelle</div>
+          <div id="preview-amount" style="font-size:2rem;font-weight:900;color:var(--blue);line-height:1;">—</div>
+          <div style="font-size:.77rem;color:var(--gray);margin-top:4px;">/ mois</div>
+          <div style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:8px;padding:10px 12px;margin-top:10px;text-align:left;">
+            <div style="font-size:.78rem;font-weight:700;color:#dc2626;margin-bottom:4px;">⚠️ Important — À lire avant de continuer</div>
+            <div style="font-size:.75rem;color:#b91c1c;line-height:1.55;">Ces prix sont calculés pour une personne <strong>non-fumeuse en bonne santé</strong>. Les fourchettes affichées représentent <strong>90 % des vrais prix à jour de mai 2026</strong> selon les assureurs partenaires. Votre prime réelle peut différer selon votre profil médical complet, votre historique et l'assureur retenu. Un conseiller certifié AMF vous confirmera le tarif exact.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- STEP 4 : RÉSERVATION RDV -->
+      <div class="wiz-step" id="wiz-step-4">
         <div class="wiz-step-title">📅 Réservez votre consultation gratuite</div>
         <div class="wiz-step-sub">Choisissez un créneau qui vous convient avec un conseiller certifié AMF. La réservation est <strong>obligatoire</strong> pour finaliser votre demande.</div>
 
@@ -1601,8 +1593,8 @@
         <iframe id="booking-iframe" src="" style="width:100%;height:680px;border:none;border-radius:12px;display:block;" title="Réservation de consultation"></iframe>
       </div>
 
-      <!-- STEP 6 : CONFIRMATION -->
-      <div class="wiz-step" id="wiz-step-6">
+      <!-- STEP 5 : CONFIRMATION -->
+      <div class="wiz-step" id="wiz-step-5">
         <div style="text-align:center; padding: 10px 0 20px;">
 
           <div style="width:80px;height:80px;background:#dcfce7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:2.4rem;">✅</div>
@@ -1693,7 +1685,7 @@ function selectOpt(el) {
 
 // ── Wizard state ──────────────────────────────────────────────
 let wizStep = 1;
-const TOTAL = 6;
+const TOTAL = 5;
 const ws = { type:null, prenom:'', nom:'', age:40, sexe:null,
              fumeur:null, sante:null, sante_detail:'', montant:null, montant_label:'', duree:null,
              email:'', telephone:'', ville:'', booked:false };
@@ -1882,7 +1874,7 @@ function showStep(n) {
     btnNext.style.cursor = 'pointer';
   }
   if (n === 3) setupStep3();
-  if (n === 5) setupStep5();
+  if (n === 4) setupStep5();
 }
 
 // ── Step 3 dynamic content ────────────────────────────────────
@@ -2047,7 +2039,7 @@ function validateStep(n) {
     if (!ws.montant)                               { setErr('err-montant',true); ok=false; } else setErr('err-montant',false);
     if (ws.type==='temporaire' && !ws.duree)       { setErr('err-duree',true);   ok=false; } else setErr('err-duree',false);
   }
-  if (n === 4) {
+  if (n === 2) {
     if (!ws.prenom.trim()) { setErr('err-prenom',true);  ok=false; } else setErr('err-prenom',false);
     if (!ws.nom.trim())    { setErr('err-nom',true);     ok=false; } else setErr('err-nom',false);
     const eRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -2064,11 +2056,11 @@ function validateStep(n) {
       setErr('err-ville',true); villeEl.classList.add('input-error'); ok=false;
     } else { setErr('err-ville',false); villeEl.classList.remove('input-error'); }
     if (!ok) {
-      const first = document.querySelector('#wiz-step-4 .input-error');
+      const first = document.querySelector('#wiz-step-2 .input-error');
       if (first) first.scrollIntoView({behavior:'smooth', block:'center'});
     }
   }
-  if (n === 5) {
+  if (n === 4) {
     if (!ws.booked) {
       const lockMsg = document.getElementById('booking-lock-msg');
       lockMsg.style.animation = 'none'; void lockMsg.offsetHeight; lockMsg.style.animation = 'shake .4s ease';
@@ -2121,7 +2113,7 @@ function markBooked() {
   document.getElementById('booking-lock-msg').style.display = 'none';
   const confirmed = document.getElementById('booking-confirmed-msg');
   confirmed.style.display = 'flex';
-  if (wizStep === 5) {
+  if (wizStep === 4) {
     const btn = document.getElementById('wiz-btn-next');
     btn.disabled = false;
     btn.style.opacity = '1';
